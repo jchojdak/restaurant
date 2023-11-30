@@ -1,3 +1,22 @@
-# **Restaurant**
+# Restaurant
+Application backend for contactless customer service in restaurant.
 
-Restaurant backend
+## Technology stack
+* Spring Boot
+* Spring Web
+* Spring Data
+* Spring Security
+* Springdoc OpenAPI
+* ModelMapper
+* JJWT
+* Lombok
+* MySQL
+
+## Setup
+1. Clone repository
+
+<pre>git clone https://github.com/jchojdak/restaurant.git</pre>
+
+2. Open the cloned directory
+
+<pre>cd restaurant</pre>
