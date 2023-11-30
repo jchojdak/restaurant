@@ -1,6 +1,5 @@
 package com.jchojdak.restaurant.init;
 
-import com.jchojdak.restaurant.repository.RestaurantRepository;
 import com.jchojdak.restaurant.service.IRestaurantService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;

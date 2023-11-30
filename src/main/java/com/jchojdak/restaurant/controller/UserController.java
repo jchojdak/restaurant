@@ -1,6 +1,5 @@
 package com.jchojdak.restaurant.controller;
 
-import com.jchojdak.restaurant.model.Category;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.UserDto;
 import com.jchojdak.restaurant.service.IUserService;
@@ -16,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")

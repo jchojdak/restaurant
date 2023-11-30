@@ -1,7 +1,6 @@
 package com.jchojdak.restaurant.model.dto;
 
 import com.jchojdak.restaurant.model.Role;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

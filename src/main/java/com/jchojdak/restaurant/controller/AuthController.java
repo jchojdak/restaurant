@@ -8,7 +8,6 @@ import com.jchojdak.restaurant.security.jwt.JwtUtils;
 import com.jchojdak.restaurant.security.user.RestaurantUserDetails;
 import com.jchojdak.restaurant.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
