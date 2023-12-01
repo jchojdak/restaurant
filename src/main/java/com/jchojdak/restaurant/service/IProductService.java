@@ -15,4 +15,6 @@ public interface IProductService {
     void saveProduct(Product product);
 
     void deleteProduct(Long id);
+
+    List<ProductInfoDto> getProductsByName(String searchByName);
 }
