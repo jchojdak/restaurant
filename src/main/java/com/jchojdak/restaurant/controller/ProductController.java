@@ -1,5 +1,7 @@
 package com.jchojdak.restaurant.controller;
 
+import com.jchojdak.restaurant.exception.NotFoundException;
+import com.jchojdak.restaurant.exception.RoleAlreadyExistException;
 import com.jchojdak.restaurant.model.Category;
 import com.jchojdak.restaurant.model.Product;
 import com.jchojdak.restaurant.model.dto.ProductDto;
@@ -27,9 +29,21 @@ public class ProductController {
     private final ICategoryService categoryService;
 
     @GetMapping("/all")
-    @Operation(summary = "Get all products")
-    public List<ProductInfoDto> getAllProducts() {
-        return productService.getAllProducts();
+    @Operation(summary = "Get all products, not required searchByName query")
+    public ResponseEntity<List<ProductInfoDto>> getAllProducts(@RequestParam(required = false) String searchByName) {
+        List<ProductInfoDto> products;
+
+        if (searchByName != null && !searchByName.isEmpty()) {
+            products = productService.getProductsByName(searchByName);
+        } else {
+            products = productService.getAllProducts();
+        }
+
+        if (products.isEmpty()) {
+            throw new NotFoundException("No product found by name");
+        } else {
+            return ResponseEntity.ok(products);
+        }
     }
 
     @GetMapping("/favorite")

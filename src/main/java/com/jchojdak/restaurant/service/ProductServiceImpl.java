@@ -64,6 +64,14 @@ public class ProductServiceImpl implements IProductService {
         }
     }
 
+    @Override
+    public List<ProductInfoDto> getProductsByName(String searchByName) {
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(searchByName);
+        return products.stream()
+                .map(product -> mapToProductInfoDto(product))
+                .collect(Collectors.toList());
+    }
+
     private ProductInfoDto mapToProductInfoDto(Product product) {
         ProductInfoDto productInfoDto = modelMapper.map(product, ProductInfoDto.class);
 

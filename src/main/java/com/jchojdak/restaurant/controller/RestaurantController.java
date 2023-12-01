@@ -21,7 +21,6 @@ public class RestaurantController {
         return restaurantService.getAll();
     }
 
-    //TO-DO - add security
     @PutMapping("/update")
     @Operation(summary = "Update restaurant info", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<RestaurantDto> partiallyUpdate(@RequestBody RestaurantDto restaurantDto) {
