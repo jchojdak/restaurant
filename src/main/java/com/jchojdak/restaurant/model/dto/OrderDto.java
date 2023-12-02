@@ -10,9 +10,7 @@ import java.util.List;
 public class OrderDto {
 
     private String optionalDeliveryAddress;
-    private int optional_table_number;
+    private int optionalTableNumber;
     private List<OrderProductDto> orderProductsDto;
-
-
 
 }

@@ -6,6 +6,7 @@ import com.jchojdak.restaurant.model.OrderProduct;
 import com.jchojdak.restaurant.model.Product;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.OrderDto;
+import com.jchojdak.restaurant.model.dto.OrderInfoDto;
 import com.jchojdak.restaurant.model.dto.OrderProductDto;
 import com.jchojdak.restaurant.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements  IOrderService {
         order.setStatus("CREATED");
         order.setTotalPrice(calculateTotalPrice(orderDto.getOrderProductsDto()));
         order.setOptionalDeliveryAddress(orderDto.getOptionalDeliveryAddress());
-        order.setOptional_table_number(orderDto.getOptional_table_number());
+        order.setOptionalTableNumber(orderDto.getOptionalTableNumber());
         order.setUser(user);
 
         List<OrderProduct> orderProducts = new ArrayList<>();
@@ -56,17 +57,17 @@ public class OrderServiceImpl implements  IOrderService {
     }
 
     @Override
-    public OrderDto getOrderById(Long id) {
+    public OrderInfoDto getOrderById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
-            return mapToOrderDto(order.get());
+            return mapToOrderInfoDto(order.get());
         } else {
             throw new NotFoundException("Order does not exist");
         }
     }
 
-    private OrderDto mapToOrderDto(Order order) {
-        OrderDto orderDto = modelMapper.map(order, OrderDto.class);
+    private OrderInfoDto mapToOrderInfoDto(Order order) {
+        OrderInfoDto orderInfoDto = modelMapper.map(order, OrderInfoDto.class);
 
         List<OrderProductDto> orderProductsDto = new ArrayList<>();
 
@@ -79,10 +80,9 @@ public class OrderServiceImpl implements  IOrderService {
             orderProductsDto.add(orderProductDto);
         }
 
-        orderDto.setOrderProductsDto(orderProductsDto);
+        orderInfoDto.setOrderProductsDto(orderProductsDto);
 
-
-        return orderDto;
+        return orderInfoDto;
     }
 
     private BigDecimal calculateTotalPrice(List<OrderProductDto> orderProductsDto) {

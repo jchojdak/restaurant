@@ -4,6 +4,7 @@ import com.jchojdak.restaurant.exception.NotFoundException;
 import com.jchojdak.restaurant.model.Order;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.OrderDto;
+import com.jchojdak.restaurant.model.dto.OrderInfoDto;
 import com.jchojdak.restaurant.service.IOrderService;
 import com.jchojdak.restaurant.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,9 +27,8 @@ public class OrderController {
 
     @GetMapping("/details/{id}")
     @Operation(summary = "Get order details")
-    public OrderDto getOrderDetails(@PathVariable Long id) {
+    public OrderInfoDto getOrderDetails(@PathVariable Long id) {
         // TODO Authentication
-        // TODO Change OrderDto to OrderInfoDto (add orderDate, status, totalPrice etc)
 
         return orderService.getOrderById(id);
     }

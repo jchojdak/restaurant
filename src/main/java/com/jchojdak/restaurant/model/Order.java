@@ -37,7 +37,7 @@ public class Order {
     private String optionalDeliveryAddress;
 
     @Column(name = "optional_table_number")
-    private int optional_table_number;
+    private int optionalTableNumber;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderProduct> orderProducts;
