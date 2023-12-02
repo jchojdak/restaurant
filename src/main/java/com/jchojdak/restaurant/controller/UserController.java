@@ -2,6 +2,7 @@ package com.jchojdak.restaurant.controller;
 
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.UserDto;
+import com.jchojdak.restaurant.model.dto.UserInfoDto;
 import com.jchojdak.restaurant.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,7 +27,7 @@ public class UserController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Get all users", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<List<User>> getUsers(){
+    public ResponseEntity<List<UserInfoDto>> getUsers(){
 
         return new ResponseEntity<>(userService.getUsers(), HttpStatus.FOUND);
     }

@@ -5,10 +5,12 @@ import com.jchojdak.restaurant.exception.UserAlreadyExistsException;
 import com.jchojdak.restaurant.model.Order;
 import com.jchojdak.restaurant.model.Role;
 import com.jchojdak.restaurant.model.User;
+import com.jchojdak.restaurant.model.dto.UserInfoDto;
 import com.jchojdak.restaurant.repository.RoleRepository;
 import com.jchojdak.restaurant.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public User registerUser(User user) {
@@ -37,8 +41,12 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserInfoDto> getUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> modelMapper.map(user, UserInfoDto.class))
+                .collect(Collectors.toList());
     }
 
     @Transactional
