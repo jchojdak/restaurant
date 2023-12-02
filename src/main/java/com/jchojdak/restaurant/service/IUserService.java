@@ -13,6 +13,7 @@ public interface IUserService {
     List<UserInfoDto> getUsers();
     void deleteUser(String email);
     User getUser(String email);
+    UserInfoDto getUserInfoDto(String email);
 
     User getLoggedInUserDetails(Authentication authentication);
 }
