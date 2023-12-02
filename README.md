@@ -20,3 +20,7 @@ Application backend for contactless customer service in restaurant.
 2. Open the cloned directory
 
 <pre>cd restaurant</pre>
+
+## OpenAPI 3.0
+### Swagger
+<pre>localhost:8080/api/swagger-ui/index.html</pre>
