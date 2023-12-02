@@ -8,4 +8,6 @@ public interface IOrderService {
     void createOrder(User user, OrderDto orderDto);
 
     OrderInfoDto getOrderById(Long id);
+
+    OrderInfoDto getOrderById(Long id, User user);
 }

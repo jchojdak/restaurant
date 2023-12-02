@@ -26,11 +26,17 @@ public class OrderController {
     private final IUserService userService;
 
     @GetMapping("/details/{id}")
-    @Operation(summary = "Get order details")
-    public OrderInfoDto getOrderDetails(@PathVariable Long id) {
-        // TODO Authentication
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get order details", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> getOrderDetails(@PathVariable Long id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.getLoggedInUserDetails(authentication);
 
-        return orderService.getOrderById(id);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
+        return new ResponseEntity<>(orderService.getOrderById(id, user), HttpStatus.OK);
     }
 
 

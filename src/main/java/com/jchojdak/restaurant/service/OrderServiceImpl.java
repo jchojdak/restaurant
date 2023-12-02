@@ -1,5 +1,6 @@
 package com.jchojdak.restaurant.service;
 
+import com.jchojdak.restaurant.exception.ForbiddenException;
 import com.jchojdak.restaurant.exception.NotFoundException;
 import com.jchojdak.restaurant.model.Order;
 import com.jchojdak.restaurant.model.OrderProduct;
@@ -60,6 +61,21 @@ public class OrderServiceImpl implements  IOrderService {
     public OrderInfoDto getOrderById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
+            return mapToOrderInfoDto(order.get());
+        } else {
+            throw new NotFoundException("Order does not exist");
+        }
+    }
+
+    @Override
+    public OrderInfoDto getOrderById(Long id, User user) {
+        Optional<Order> order = orderRepository.findById(id);
+
+        if (order.isPresent()) {
+            if (order.get().getUser() != user) {
+                throw new ForbiddenException("This is not your order");
+            }
+
             return mapToOrderInfoDto(order.get());
         } else {
             throw new NotFoundException("Order does not exist");
