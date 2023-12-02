@@ -37,7 +37,7 @@ public class AuthController {
 
     @PostMapping("/register")
     @Operation(summary = "Register to the api")
-    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest){
+    public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
         User user = modelMapper.map(registerRequest, User.class);
 
         try{

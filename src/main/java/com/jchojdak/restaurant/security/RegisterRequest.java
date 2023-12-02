@@ -22,13 +22,10 @@ public class RegisterRequest {
     @NotBlank
     private String phoneNumber;
 
-    @NotBlank
     private String postCode;
 
-    @NotBlank
     private String city;
 
-    @NotBlank
     private String addressLine1;
 
     private String addressLine2;
