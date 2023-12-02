@@ -1,6 +1,8 @@
 package com.jchojdak.restaurant.service;
 
+import com.jchojdak.restaurant.exception.NotFoundException;
 import com.jchojdak.restaurant.exception.UserAlreadyExistsException;
+import com.jchojdak.restaurant.model.Order;
 import com.jchojdak.restaurant.model.Role;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.repository.RoleRepository;
@@ -46,7 +48,15 @@ public class UserServiceImpl implements IUserService {
         if (theUser != null){
             userRepository.deleteByEmail(email);
         }
+    }
 
+    @Override
+    public void addOrderToUser(Long userId, Order order) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User not found"));
+        user.getOrders().add(order);
+
+        userRepository.save(user);
     }
 
     @Override

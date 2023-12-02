@@ -57,7 +57,8 @@ public class DataLoader implements CommandLineRunner {
                     "City",
                     "Address line 1",
                     "Address line 2",
-                    Collections.singleton(adminRole)
+                    Collections.singleton(adminRole),
+                    null
                     );
             userService.registerUser(admin);
 

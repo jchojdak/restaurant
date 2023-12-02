@@ -57,9 +57,9 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/auth/**", "/restaurant/info", "/restaurant/details/**", "/products/all", "/products/details/**", "/products/favorite", "/categories/all").permitAll()
+                        .requestMatchers("/auth/**", "/restaurant/info", "/restaurant/details/**", "/products/all", "/products/details/**", "/products/favorite", "/categories/all", "/orders/details/**").permitAll()
                         .requestMatchers("/roles/**", "/restaurant/update", "/products/add", "/products/delete/**", "/categories/add", "/categories/delete/**").hasRole("ADMIN")
-                        .requestMatchers("/users/details").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/users/details", "/orders/add").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

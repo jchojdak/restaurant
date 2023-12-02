@@ -50,6 +50,16 @@ public class ProductServiceImpl implements IProductService {
     }
 
     @Override
+    public Product getProductById(Long id) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isPresent()) {
+            return product.get();
+        } else {
+            throw new NotFoundException("Product id " + id +" does not exist");
+        }
+    }
+
+    @Override
     public void saveProduct(Product product) {
         productRepository.save(product);
     }

@@ -12,6 +12,8 @@ public interface IProductService {
 
     ProductInfoDto findProductById(Long id);
 
+    Product getProductById(Long id);
+
     void saveProduct(Product product);
 
     void deleteProduct(Long id);

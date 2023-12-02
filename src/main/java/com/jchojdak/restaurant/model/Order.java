@@ -1,5 +1,6 @@
 package com.jchojdak.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,14 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-
-/*
-
-cale do wyjebania xd
-
- */
-
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,42 +22,27 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long orderId;
+    private Long id;
 
-    @Column(name = "total_price")
+    @Column(name = "order_date", nullable = false)
+    private LocalDateTime orderDate;
+
+    @Column(name = "status", nullable = false)
+    private String status;
+
+    @Column(name = "total_price", nullable = false)
     private BigDecimal totalPrice;
 
-    @Column(name = "status")
-    private String status; //TO-DO - add types of status
+    @Column(name = "optional_delivery_address")
+    private String optionalDeliveryAddress;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
+    @Column(name = "optional_table_number")
+    private int optional_table_number;
 
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderProduct> orderProducts;
 
-    @Column(name = "full_name")
-    private String fullName;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
-    @Column(name = "post_code")
-    private String postCode;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "address_line1")
-    private String addressLine1;
-
-    @Column(name = "address_line2")
-    private String addressLine2;
-
-    //TO-DO - add products list
-    //TO-DO - add types of delivery
-
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 }
