@@ -10,4 +10,6 @@ public interface IOrderService {
     OrderInfoDto getOrderById(Long id);
 
     OrderInfoDto getOrderById(Long id, User user);
+
+    void updateOrderStatus(Long id, String status);
 }

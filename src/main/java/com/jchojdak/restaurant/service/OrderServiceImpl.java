@@ -82,6 +82,20 @@ public class OrderServiceImpl implements  IOrderService {
         }
     }
 
+    @Override
+    public void updateOrderStatus(Long orderId, String newStatus) {
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+
+            order.setStatus(newStatus);
+            orderRepository.save(order);
+        } else {
+            throw new NotFoundException("Order not found");
+        }
+    }
+
     private OrderInfoDto mapToOrderInfoDto(Order order) {
         OrderInfoDto orderInfoDto = modelMapper.map(order, OrderInfoDto.class);
 

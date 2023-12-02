@@ -39,33 +39,6 @@ public class OrderController {
         return new ResponseEntity<>(orderService.getOrderById(id, user), HttpStatus.OK);
     }
 
-
-    /*
-
-        @GetMapping("/details/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    @Operation(summary = "Get order details", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> getOrderDetails(@PathVariable Long id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.getLoggedInUserDetails(authentication);
-
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-        Optional<Order> orderOptional = orderService.getOrderById(id);
-        if (orderOptional.isPresent() && orderOptional.get().getUser().getId().equals(user.getId())) {
-            Order order = orderOptional.get();
-            return new ResponseEntity<>(order, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-
-    }
-
-     */
-
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Create new order", security = @SecurityRequirement(name = "bearerAuth"))
@@ -78,10 +51,19 @@ public class OrderController {
         } else {
             orderService.createOrder(user, orderDto);
 
-            System.out.println(user.getEmail());
-
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
     }
 
+    @PatchMapping("/update-status/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update order status", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<String> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
+        try {
+            orderService.updateOrderStatus(id, status);
+            return new ResponseEntity<>("Order status updated successfully", HttpStatus.OK);
+        } catch (NotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
 }
