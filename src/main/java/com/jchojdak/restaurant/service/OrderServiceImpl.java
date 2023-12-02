@@ -73,7 +73,7 @@ public class OrderServiceImpl implements  IOrderService {
         for (OrderProduct orderProduct : order.getOrderProducts()) {
             OrderProductDto orderProductDto = new OrderProductDto();
 
-            orderProductDto.setId(orderProduct.getId());
+            orderProductDto.setId(orderProduct.getProduct().getId());
             orderProductDto.setQuantity(orderProduct.getQuantity());
 
             orderProductsDto.add(orderProductDto);
