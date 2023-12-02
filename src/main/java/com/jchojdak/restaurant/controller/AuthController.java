@@ -3,6 +3,7 @@ package com.jchojdak.restaurant.controller;
 import com.jchojdak.restaurant.exception.UserAlreadyExistsException;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.security.LoginRequest;
+import com.jchojdak.restaurant.security.RegisterRequest;
 import com.jchojdak.restaurant.security.jwt.JwtResponse;
 import com.jchojdak.restaurant.security.jwt.JwtUtils;
 import com.jchojdak.restaurant.security.user.RestaurantUserDetails;
@@ -10,6 +11,7 @@ import com.jchojdak.restaurant.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -31,10 +33,13 @@ public class AuthController {
     private final IUserService userService;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
+    private final ModelMapper modelMapper;
 
     @PostMapping("/register")
     @Operation(summary = "Register to the api")
-    public ResponseEntity<?> registerUser(@RequestBody User user){
+    public ResponseEntity<?> registerUser(@RequestBody RegisterRequest registerRequest){
+        User user = modelMapper.map(registerRequest, User.class);
+
         try{
             userService.registerUser(user);
             return ResponseEntity.ok("Registration successful!");
