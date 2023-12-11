@@ -20,6 +20,30 @@ public class RoleServiceImpl implements IRoleService {
     private final UserRepository userRepository;
 
     @Override
+    public void init() {
+        if (!roleRepository.existsByName("ROLE_USER")) {
+            Role roleUser = new Role();
+            roleUser.setName("ROLE_USER");
+            roleRepository.save(roleUser);
+        }
+        if (!roleRepository.existsByName("ROLE_ADMIN")) {
+            Role roleAdmin = new Role();
+            roleAdmin.setName("ROLE_ADMIN");
+            roleRepository.save(roleAdmin);
+        }
+        if (!roleRepository.existsByName("ROLE_STAFF")) {
+            Role roleStaff = new Role();
+            roleStaff.setName("ROLE_STAFF");
+            roleRepository.save(roleStaff);
+        }
+        if (!roleRepository.existsByName("ROLE_KITCHEN")) {
+            Role roleKitchen = new Role();
+            roleKitchen.setName("ROLE_KITCHEN");
+            roleRepository.save(roleKitchen);
+        }
+    }
+
+    @Override
     public List<Role> getRoles() {
         return roleRepository.findAll();
     }
@@ -60,7 +84,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public User assignRoleToUser(Long userId, Long roleId) {
         Optional<User> user = userRepository.findById(userId);
-        Optional<Role>  role = roleRepository.findById(roleId);
+        Optional<Role> role = roleRepository.findById(roleId);
         if (user.isPresent() && user.get().getRoles().contains(role.get())){
             throw new UserAlreadyExistsException(
                     user.get().getFirstName()+ " is already assigned to the" + role.get().getName()+ " role");

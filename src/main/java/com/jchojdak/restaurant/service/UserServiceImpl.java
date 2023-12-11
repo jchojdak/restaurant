@@ -16,8 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +26,37 @@ public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
+
+    private final IRoleService roleService;
+
+    @Override
+    public void init() {
+        if (!userRepository.existsByEmail("admin@admin.com")) {
+            Role adminRole = roleRepository.findByName("ROLE_ADMIN").get();
+            Role userRole = roleRepository.findByName("ROLE_USER").get();
+
+            User admin = new User(
+                    1L,
+                    "Admin",
+                    "Admin",
+                    "admin@admin.com",
+                    "admin",
+                    "123123123",
+                    "XX-XXX",
+                    "City",
+                    "Address line 1",
+                    "Address line 2",
+                    Collections.singleton(adminRole),
+                    null
+            );
+            registerUser(admin);
+
+            List<Role> roles = Arrays.asList(userRole, adminRole);
+
+            admin.setRoles(roles);
+            userRepository.save(admin);
+        }
+    }
 
     @Override
     public User registerUser(User user) {

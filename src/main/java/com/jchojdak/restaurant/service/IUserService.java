@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import java.util.List;
 
 public interface IUserService {
+    void init();
+
     User registerUser(User user);
     void addOrderToUser(Long userId, Order order);
     List<UserInfoDto> getUsers();
@@ -16,4 +18,5 @@ public interface IUserService {
     UserInfoDto getUserInfoDto(String email);
 
     User getLoggedInUserDetails(Authentication authentication);
+
 }

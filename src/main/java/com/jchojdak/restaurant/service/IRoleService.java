@@ -6,6 +6,8 @@ import com.jchojdak.restaurant.model.User;
 import java.util.List;
 
 public interface IRoleService {
+    void init();
+
     List<Role> getRoles();
     Role createRole(Role theRole);
 
