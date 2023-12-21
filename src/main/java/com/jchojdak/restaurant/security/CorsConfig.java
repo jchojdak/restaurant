@@ -21,7 +21,7 @@ public class CorsConfig {
     private static final int CORS_FILTER_ORDER = -102;
 
     @Value("${cors.url}")
-    private static String corsUrl;
+    private String corsUrl;
 
     @Bean
     public FilterRegistrationBean corsFilter() {
