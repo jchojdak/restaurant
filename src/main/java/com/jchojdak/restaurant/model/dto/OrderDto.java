@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 public class OrderDto {
 
-    private String optionalDeliveryAddress;
     private int optionalTableNumber;
     private List<OrderProductDto> orderProductsDto;
 

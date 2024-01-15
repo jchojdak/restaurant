@@ -36,7 +36,6 @@ public class OrderServiceImpl implements  IOrderService {
         order.setOrderDate(LocalDateTime.now());
         order.setStatus("CREATED");
         order.setTotalPrice(calculateTotalPrice(orderDto.getOrderProductsDto()));
-        order.setOptionalDeliveryAddress(orderDto.getOptionalDeliveryAddress());
         order.setOptionalTableNumber(orderDto.getOptionalTableNumber());
         order.setUser(user);
 

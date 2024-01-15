@@ -15,7 +15,6 @@ public class OrderInfoDto {
     private LocalDateTime orderDate;
     private String status;
     private BigDecimal totalPrice;
-    private String optionalDeliveryAddress;
     private int optionalTableNumber;
     private List<OrderProductDto> orderProductsDto;
 
