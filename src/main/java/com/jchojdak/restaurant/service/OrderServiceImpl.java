@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +94,41 @@ public class OrderServiceImpl implements  IOrderService {
         } else {
             throw new NotFoundException("Order not found");
         }
+    }
+
+    @Override
+    public List<OrderInfoDto> getAllOrdersByUserId(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByUserIdAndStatus(Long userId, String status) {
+        List<Order> orders = orderRepository.findByUserIdAndStatus(userId, status);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByStatus(String status) {
+        List<Order> orders = orderRepository.findByStatus(status);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getAllOrders() {
+        List<Order> orders = orderRepository.findAll();
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
     }
 
     private OrderInfoDto mapToOrderInfoDto(Order order) {

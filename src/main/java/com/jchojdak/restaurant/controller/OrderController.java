@@ -17,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/orders")
 @RequiredArgsConstructor
@@ -65,5 +67,43 @@ public class OrderController {
         } catch (NotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/my")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @Operation(summary = "Get logged in user orders", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> getLoggedInUserOrders(
+            Authentication authentication,
+            @RequestParam(required = false) String status
+    ) {
+        User user = userService.getLoggedInUserDetails(authentication);
+
+        if (user != null) {
+            List<OrderInfoDto> orders;
+
+            if (status != null && !status.isEmpty()) {
+                orders = orderService.getOrdersByUserIdAndStatus(user.getId(), status);
+            } else {
+                orders = orderService.getAllOrdersByUserId(user.getId());
+            }
+
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get all orders", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> getAllOrders(@RequestParam(required = false) String status) {
+        List<OrderInfoDto> orders;
+
+        if (status != null && !status.isEmpty()) {
+            orders = orderService.getOrdersByStatus(status);
+        } else {
+            orders = orderService.getAllOrders();
+        }
+        return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 }

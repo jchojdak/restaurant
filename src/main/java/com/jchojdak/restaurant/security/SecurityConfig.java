@@ -58,8 +58,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/auth/**", "/restaurant/info", "/restaurant/details/**", "/products/all", "/products/details/**", "/products/favorite", "/categories/all").permitAll()
-                        .requestMatchers("/roles/**", "/restaurant/update", "/products/add", "/products/delete/**", "/categories/add", "/categories/delete/**", "/orders/update-status/**").hasRole("ADMIN")
-                        .requestMatchers("/users/details", "/orders/add", "/orders/details/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/roles/**", "/restaurant/update", "/products/add", "/products/delete/**", "/categories/add", "/categories/delete/**", "/orders/update-status/**", "/orders/all").hasRole("ADMIN")
+                        .requestMatchers("/users/details", "/orders/add", "/orders/details/**", "/orders/my").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated());
         http.authenticationProvider(authenticationProvider());
         http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);

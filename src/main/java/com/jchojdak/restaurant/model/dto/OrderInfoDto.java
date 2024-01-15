@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 public class OrderInfoDto {
 
+    private Long id;
     private LocalDateTime orderDate;
     private String status;
     private BigDecimal totalPrice;
