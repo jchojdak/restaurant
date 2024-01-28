@@ -64,7 +64,6 @@ public class UserServiceImpl implements IUserService {
             throw new UserAlreadyExistsException(user.getEmail() + " already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        System.out.println(user.getPassword());
         Role userRole = roleRepository.findByName("ROLE_USER").get();
         user.setRoles(Collections.singletonList(userRole));
         return userRepository.save(user);
@@ -115,5 +114,48 @@ public class UserServiceImpl implements IUserService {
     public User getLoggedInUserDetails(Authentication authentication) {
         String email = authentication.getName();
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public User editUserDetails(Authentication authentication, Map<String, Object> updates) {
+        User loggedInUser = getLoggedInUserDetails(authentication);
+
+        if (loggedInUser != null) {
+            updates.forEach((key, value) -> {
+                switch (key) {
+                    case "password":
+                        if (value != null && !value.toString().isEmpty()) {
+                            loggedInUser.setPassword(passwordEncoder.encode(value.toString()));
+                        }
+                        break;
+                    case "firstName":
+                        if (value != null && !value.toString().isEmpty()) {
+                            loggedInUser.setFirstName(value.toString());
+                        }
+                        break;
+                    case "lastName":
+                        if (value != null && !value.toString().isEmpty()) {
+                            loggedInUser.setLastName(value.toString());
+                        }
+                        break;
+                    case "email":
+                        if (value != null && !value.toString().isEmpty()) {
+                            loggedInUser.setEmail(value.toString());
+                        }
+                        break;
+                    case "phoneNumber":
+                        if (value != null && !value.toString().isEmpty()) {
+                            loggedInUser.setPhoneNumber(value.toString());
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+
+            return userRepository.save(loggedInUser);
+        } else {
+            return null;
+        }
     }
 }

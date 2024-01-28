@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -60,6 +61,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
         }
     }
+
     @DeleteMapping("/delete/{userId}")
     @Operation(summary = "Delete user by id", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') and #email == principal.username)")
@@ -73,4 +75,21 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user: " + e.getMessage());
         }
     }
+
+    @PatchMapping("/edit")
+    @Operation(summary = "Edit logged in user details", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<UserDto> editUserDetails(Authentication authentication, @RequestBody Map<String, Object> updates) {
+        User updatedUser = userService.editUserDetails(authentication, updates);
+
+        if (updatedUser != null) {
+            UserDto userDto = modelMapper.map(updatedUser, UserDto.class);
+
+            return new ResponseEntity<>(userDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

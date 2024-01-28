@@ -6,6 +6,7 @@ import com.jchojdak.restaurant.model.dto.UserInfoDto;
 import org.springframework.security.core.Authentication;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IUserService {
     void init();
@@ -19,4 +20,5 @@ public interface IUserService {
 
     User getLoggedInUserDetails(Authentication authentication);
 
+    User editUserDetails(Authentication authentication, Map<String, Object> updates);
 }

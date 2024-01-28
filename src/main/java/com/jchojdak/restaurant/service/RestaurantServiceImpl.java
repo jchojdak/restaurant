@@ -60,7 +60,6 @@ public class RestaurantServiceImpl implements IRestaurantService {
         Restaurant updatedRestaurant = restaurantRepository.save(restaurantMapped);
 
         return restaurantDto;
-        // TUTAJ SKOŃCZ
     }
 
 }
