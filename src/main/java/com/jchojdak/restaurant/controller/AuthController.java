@@ -57,7 +57,6 @@ public class AuthController {
                         .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
-        System.out.println("# TOKEN: " + jwt);
         RestaurantUserDetails userDetails = (RestaurantUserDetails) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities()
                 .stream()

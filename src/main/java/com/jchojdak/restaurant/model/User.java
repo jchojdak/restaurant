@@ -38,18 +38,6 @@ public class User {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "post_code")
-    private String postCode;
-
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "address_line1")
-    private String addressLine1;
-
-    @Column(name = "address_line2")
-    private String addressLine2;
-
     @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH})
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

@@ -15,10 +15,6 @@ public class UserInfoDto {
     private String lastName;
     private String email;
     private String phoneNumber;
-    private String postCode;
-    private String city;
-    private String addressLine1;
-    private String addressLine2;
     private Collection<Role> roles = new HashSet<>();
 
 }

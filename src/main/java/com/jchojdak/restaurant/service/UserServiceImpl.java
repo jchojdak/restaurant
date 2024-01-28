@@ -42,10 +42,6 @@ public class UserServiceImpl implements IUserService {
                     "admin@admin.com",
                     "admin",
                     "123123123",
-                    "XX-XXX",
-                    "City",
-                    "Address line 1",
-                    "Address line 2",
                     Collections.singleton(adminRole),
                     null
             );
