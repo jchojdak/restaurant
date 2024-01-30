@@ -10,6 +10,7 @@ import com.jchojdak.restaurant.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -96,13 +98,33 @@ public class OrderController {
     @GetMapping("/all")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Get all orders", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<?> getAllOrders(@RequestParam(required = false) String status) {
+    public ResponseEntity<?> getAllOrders(
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate) {
+
         List<OrderInfoDto> orders;
 
         if (status != null && !status.isEmpty()) {
-            orders = orderService.getOrdersByStatus(status);
+            if (fromDate != null && toDate != null) {
+                orders = orderService.getOrdersByStatusAndDateRange(status, fromDate, toDate);
+            } else if (fromDate != null) {
+                orders = orderService.getOrdersByStatusAndFromDate(status, fromDate);
+            } else if (toDate != null) {
+                orders = orderService.getOrdersByStatusAndToDate(status, toDate);
+            } else {
+                orders = orderService.getOrdersByStatus(status);
+            }
         } else {
-            orders = orderService.getAllOrders();
+            if (fromDate != null && toDate != null) {
+                orders = orderService.getOrdersByDateRange(fromDate, toDate);
+            } else if (fromDate != null) {
+                orders = orderService.getOrdersByFromDate(fromDate);
+            } else if (toDate != null) {
+                orders = orderService.getOrdersByToDate(toDate);
+            } else {
+                orders = orderService.getAllOrders();
+            }
         }
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }

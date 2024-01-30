@@ -124,6 +124,60 @@ public class OrderServiceImpl implements  IOrderService {
     }
 
     @Override
+    public List<OrderInfoDto> getOrdersByStatusAndDateRange(String status, LocalDateTime fromDate, LocalDateTime toDate) {
+        List<Order> orders = orderRepository.findByStatusAndOrderDateBetween(status, fromDate, toDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByStatusAndFromDate(String status, LocalDateTime fromDate) {
+        List<Order> orders = orderRepository.findByStatusAndOrderDateGreaterThanEqual(status, fromDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByStatusAndToDate(String status, LocalDateTime toDate) {
+        List<Order> orders = orderRepository.findByStatusAndOrderDateLessThanEqual(status, toDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByDateRange(LocalDateTime fromDate, LocalDateTime toDate) {
+        List<Order> orders = orderRepository.findByOrderDateBetween(fromDate, toDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByFromDate(LocalDateTime fromDate) {
+        List<Order> orders = orderRepository.findByOrderDateGreaterThanEqual(fromDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OrderInfoDto> getOrdersByToDate(LocalDateTime toDate) {
+        List<Order> orders = orderRepository.findByOrderDateLessThanEqual(toDate);
+
+        return orders.stream()
+                .map(order -> mapToOrderInfoDto(order))
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<OrderInfoDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
