@@ -60,7 +60,7 @@ public class OrderController {
     }
 
     @PatchMapping("/update-status/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'KITCHEN')")
     @Operation(summary = "Update order status", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<String> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
         try {
@@ -96,7 +96,7 @@ public class OrderController {
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'KITCHEN')")
     @Operation(summary = "Get all orders", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> getAllOrders(
             @RequestParam(required = false) String status,

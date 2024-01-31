@@ -26,7 +26,7 @@ public class UserController {
 
     private final ModelMapper modelMapper;
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     @Operation(summary = "Get all users", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<UserInfoDto>> getUsers(){
 
@@ -34,7 +34,6 @@ public class UserController {
     }
 
     @GetMapping("/details")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get logged in user details", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<UserDto> getLoggedInUserDetails(Authentication authentication) {
         User user = userService.getLoggedInUserDetails(authentication);
@@ -48,9 +47,9 @@ public class UserController {
         }
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/search/{email}")
     @Operation(summary = "Get user by email", security = @SecurityRequirement(name = "bearerAuth"))
-    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
         try{
             UserInfoDto theUser = userService.getUserInfoDto(email);
@@ -64,7 +63,7 @@ public class UserController {
 
     @DeleteMapping("/delete/{userId}")
     @Operation(summary = "Delete user by id", security = @SecurityRequirement(name = "bearerAuth"))
-    @PreAuthorize("hasRole('ROLE_ADMIN') or (hasRole('ROLE_USER') and #email == principal.username)")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
         try{
             userService.deleteUser(email);

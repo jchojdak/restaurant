@@ -52,6 +52,59 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer :: disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/auth/**",
+                                "/restaurant/info",
+                                "/products/favorite",
+                                "/products/details/**",
+                                "/products/all",
+                                "/categories/all",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/restaurant/update",
+                                "/roles/remove-user-from-role",
+                                "/roles/remove-all-users-from-role/**",
+                                "/roles/create",
+                                "/roles/assign-user-to-role",
+                                "/roles/all",
+                                "/roles/delete/**",
+                                "/products/add",
+                                "/products/delete/**",
+                                "/categories/add",
+                                "/categories/delete/**",
+                                "/users/delete/**"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(
+                                "/users/search/**",
+                                "/users/all"
+                        ).hasAnyRole("STAFF", "ADMIN")
+                        .requestMatchers(
+                                "/orders/update-status/**",
+                                "/orders/all"
+                        ).hasAnyRole("STAFF", "ADMIN", "KITCHEN")
+                        .anyRequest().authenticated()
+                );
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+
+}
+
+/*
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer :: disable)
                 .exceptionHandling(
                         exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -66,5 +119,59 @@ public class SecurityConfig {
         return http.build();
     }
 
+ */
 
-}
+
+/*
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer :: disable)
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthEntryPoint))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/auth/**",
+                                "/restaurant/info",
+                                "/products/favorite",
+                                "/products/details/**",
+                                "/products/all",
+                                "/categories/all",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/restaurant/update",
+                                "/roles/remove-user-from-role",
+                                "/roles/remove-all-users-from-role/**",
+                                "/roles/create",
+                                "/roles/assign-user-to-role",
+                                "/roles/all",
+                                "/roles/delete/**",
+                                "/products/add",
+                                "/products/delete/**",
+                                "/orders/add",
+                                "/orders/my",
+                                "/orders/details/**",
+                                "/orders/all",
+                                "/categories/add",
+                                "/categories/delete/**",
+                                "/users/edit"
+                        ).hasRole("ADMIN")
+                        .requestMatchers(
+                                "/products/add",
+                                "/orders/add",
+                                "/users/edit",
+                                "/users/details"
+                        ).hasRole("USER")
+                        .anyRequest().authenticated()
+                );
+
+        http.authenticationProvider(authenticationProvider());
+        http.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
+
+ */

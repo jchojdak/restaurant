@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,6 +30,7 @@ public class CategoryController {
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Create new category", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<HttpStatus> createCategory(@RequestBody CategoryDto categoryDto) {
         Category category = modelMapper.map(categoryDto, Category.class);
@@ -40,6 +42,7 @@ public class CategoryController {
 
     @Operation(summary = "Delete category", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{name}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteCategory(@PathVariable String name) {
         categoryService.deleteCategory(name);
 

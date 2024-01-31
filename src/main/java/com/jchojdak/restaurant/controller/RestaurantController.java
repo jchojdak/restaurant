@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +23,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Update restaurant info", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<RestaurantDto> partiallyUpdate(@RequestBody RestaurantDto restaurantDto) {
         RestaurantDto updated = restaurantService.partiallyUpdate(restaurantDto);
