@@ -30,7 +30,6 @@ public class OrderController {
     private final IUserService userService;
 
     @GetMapping("/details/{id}")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get order details", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> getOrderDetails(@PathVariable Long id) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,7 +43,6 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Create new order", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<HttpStatus> createOrder(@RequestBody OrderDto orderDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -72,7 +70,6 @@ public class OrderController {
     }
 
     @GetMapping("/my")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @Operation(summary = "Get logged in user orders", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<?> getLoggedInUserOrders(
             Authentication authentication,
