@@ -4,6 +4,7 @@ import com.jchojdak.restaurant.exception.NotFoundException;
 import com.jchojdak.restaurant.model.Order;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.OrderDto;
+import com.jchojdak.restaurant.model.dto.OrderInfoAdminDto;
 import com.jchojdak.restaurant.model.dto.OrderInfoDto;
 import com.jchojdak.restaurant.service.IOrderService;
 import com.jchojdak.restaurant.service.IUserService;
@@ -40,6 +41,12 @@ public class OrderController {
         }
 
         return new ResponseEntity<>(orderService.getOrderById(id, user), HttpStatus.OK);
+    }
+
+    @GetMapping("/details-admin/{id}")
+    @Operation(summary = "Get order details, for admins", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<?> getOrderDetailsByAdmin(@PathVariable Long id) {
+        return new ResponseEntity<>(orderService.getOrderById(id), HttpStatus.OK);
     }
 
     @PostMapping("/add")
@@ -100,7 +107,7 @@ public class OrderController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fromDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime toDate) {
 
-        List<OrderInfoDto> orders;
+        List<OrderInfoAdminDto> orders;
 
         if (status != null && !status.isEmpty()) {
             if (fromDate != null && toDate != null) {

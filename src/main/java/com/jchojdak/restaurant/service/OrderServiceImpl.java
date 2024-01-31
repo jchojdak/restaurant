@@ -7,6 +7,7 @@ import com.jchojdak.restaurant.model.OrderProduct;
 import com.jchojdak.restaurant.model.Product;
 import com.jchojdak.restaurant.model.User;
 import com.jchojdak.restaurant.model.dto.OrderDto;
+import com.jchojdak.restaurant.model.dto.OrderInfoAdminDto;
 import com.jchojdak.restaurant.model.dto.OrderInfoDto;
 import com.jchojdak.restaurant.model.dto.OrderProductDto;
 import com.jchojdak.restaurant.repository.OrderRepository;
@@ -58,10 +59,10 @@ public class OrderServiceImpl implements  IOrderService {
     }
 
     @Override
-    public OrderInfoDto getOrderById(Long id) {
+    public OrderInfoAdminDto getOrderById(Long id) {
         Optional<Order> order = orderRepository.findById(id);
         if (order.isPresent()) {
-            return mapToOrderInfoDto(order.get());
+            return mapToOrderInfoAdminDto(order.get());
         } else {
             throw new NotFoundException("Order does not exist");
         }
@@ -115,73 +116,73 @@ public class OrderServiceImpl implements  IOrderService {
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByStatus(String status) {
+    public List<OrderInfoAdminDto> getOrdersByStatus(String status) {
         List<Order> orders = orderRepository.findByStatus(status);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByStatusAndDateRange(String status, LocalDateTime fromDate, LocalDateTime toDate) {
+    public List<OrderInfoAdminDto> getOrdersByStatusAndDateRange(String status, LocalDateTime fromDate, LocalDateTime toDate) {
         List<Order> orders = orderRepository.findByStatusAndOrderDateBetween(status, fromDate, toDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByStatusAndFromDate(String status, LocalDateTime fromDate) {
+    public List<OrderInfoAdminDto> getOrdersByStatusAndFromDate(String status, LocalDateTime fromDate) {
         List<Order> orders = orderRepository.findByStatusAndOrderDateGreaterThanEqual(status, fromDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByStatusAndToDate(String status, LocalDateTime toDate) {
+    public List<OrderInfoAdminDto> getOrdersByStatusAndToDate(String status, LocalDateTime toDate) {
         List<Order> orders = orderRepository.findByStatusAndOrderDateLessThanEqual(status, toDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByDateRange(LocalDateTime fromDate, LocalDateTime toDate) {
+    public List<OrderInfoAdminDto> getOrdersByDateRange(LocalDateTime fromDate, LocalDateTime toDate) {
         List<Order> orders = orderRepository.findByOrderDateBetween(fromDate, toDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByFromDate(LocalDateTime fromDate) {
+    public List<OrderInfoAdminDto> getOrdersByFromDate(LocalDateTime fromDate) {
         List<Order> orders = orderRepository.findByOrderDateGreaterThanEqual(fromDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getOrdersByToDate(LocalDateTime toDate) {
+    public List<OrderInfoAdminDto> getOrdersByToDate(LocalDateTime toDate) {
         List<Order> orders = orderRepository.findByOrderDateLessThanEqual(toDate);
 
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<OrderInfoDto> getAllOrders() {
+    public List<OrderInfoAdminDto> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
         return orders.stream()
-                .map(order -> mapToOrderInfoDto(order))
+                .map(order -> mapToOrderInfoAdminDto(order))
                 .collect(Collectors.toList());
     }
 
@@ -202,6 +203,26 @@ public class OrderServiceImpl implements  IOrderService {
         orderInfoDto.setOrderProductsDto(orderProductsDto);
 
         return orderInfoDto;
+    }
+
+    private OrderInfoAdminDto mapToOrderInfoAdminDto(Order order) {
+        OrderInfoAdminDto orderInfoAdminDto = modelMapper.map(order, OrderInfoAdminDto.class);
+
+        List<OrderProductDto> orderProductsDto = new ArrayList<>();
+
+        for (OrderProduct orderProduct : order.getOrderProducts()) {
+            OrderProductDto orderProductDto = new OrderProductDto();
+
+            orderProductDto.setId(orderProduct.getProduct().getId());
+            orderProductDto.setQuantity(orderProduct.getQuantity());
+
+            orderProductsDto.add(orderProductDto);
+        }
+
+        orderInfoAdminDto.setOrderProductsDto(orderProductsDto);
+        orderInfoAdminDto.setUserId(order.getUser().getId());
+
+        return orderInfoAdminDto;
     }
 
     private BigDecimal calculateTotalPrice(List<OrderProductDto> orderProductsDto) {

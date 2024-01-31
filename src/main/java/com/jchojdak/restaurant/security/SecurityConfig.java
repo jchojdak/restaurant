@@ -87,7 +87,8 @@ public class SecurityConfig {
                         ).hasAnyRole("STAFF", "ADMIN")
                         .requestMatchers(
                                 "/orders/update-status/**",
-                                "/orders/all"
+                                "/orders/all",
+                                "/orders/details-admin/**"
                         ).hasAnyRole("STAFF", "ADMIN", "KITCHEN")
                         .anyRequest().authenticated()
                 );
