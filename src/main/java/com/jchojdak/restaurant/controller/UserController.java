@@ -51,12 +51,12 @@ public class UserController {
     @Operation(summary = "Get user by email", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") String email){
-        try{
+        try {
             UserInfoDto theUser = userService.getUserInfoDto(email);
             return ResponseEntity.ok(theUser);
-        }catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching user");
         }
     }
@@ -65,19 +65,18 @@ public class UserController {
     @Operation(summary = "Delete user by id", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
-        try{
+        try {
             userService.deleteUser(email);
             return ResponseEntity.ok("User deleted successfully");
-        }catch (UsernameNotFoundException e){
+        } catch (UsernameNotFoundException e){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error deleting user: " + e.getMessage());
         }
     }
 
     @PatchMapping("/edit")
     @Operation(summary = "Edit logged in user details", security = @SecurityRequirement(name = "bearerAuth"))
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<UserDto> editUserDetails(Authentication authentication, @RequestBody Map<String, Object> updates) {
         User updatedUser = userService.editUserDetails(authentication, updates);
 

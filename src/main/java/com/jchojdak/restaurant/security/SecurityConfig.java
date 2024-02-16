@@ -61,6 +61,7 @@ public class SecurityConfig {
                                 "/products/favorite",
                                 "/products/details/**",
                                 "/products/all",
+                                "/photos/get/**",
                                 "/categories/all",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
@@ -77,6 +78,8 @@ public class SecurityConfig {
                                 "/roles/delete/**",
                                 "/products/add",
                                 "/products/delete/**",
+                                "/photos/add",
+                                "/photos/delete/**",
                                 "/categories/add",
                                 "/categories/delete/**",
                                 "/users/delete/**"

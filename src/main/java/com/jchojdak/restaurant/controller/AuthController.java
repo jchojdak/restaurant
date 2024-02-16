@@ -40,11 +40,11 @@ public class AuthController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest){
         User user = modelMapper.map(registerRequest, User.class);
 
-        try{
+        try {
             userService.registerUser(user);
             return ResponseEntity.ok("Registration successful!");
 
-        }catch (UserAlreadyExistsException e){
+        } catch (UserAlreadyExistsException e){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         }
     }
@@ -52,9 +52,8 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "Login to the api")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest request){
-        Authentication authentication =
-                authenticationManager
-                        .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        Authentication authentication = authenticationManager
+                .authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtTokenForUser(authentication);
         RestaurantUserDetails userDetails = (RestaurantUserDetails) authentication.getPrincipal();
