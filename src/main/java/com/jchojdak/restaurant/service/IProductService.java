@@ -4,6 +4,7 @@ import com.jchojdak.restaurant.model.Product;
 import com.jchojdak.restaurant.model.dto.ProductInfoDto;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IProductService {
     List<ProductInfoDto> getAllProducts();
@@ -19,4 +20,6 @@ public interface IProductService {
     void deleteProduct(Long id);
 
     List<ProductInfoDto> getProductsByName(String searchByName);
+
+    Product editProductDetails(Long id, Map<String, Object> updates);
 }

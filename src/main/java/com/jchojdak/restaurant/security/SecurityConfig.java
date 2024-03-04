@@ -78,6 +78,7 @@ public class SecurityConfig {
                                 "/roles/delete/**",
                                 "/products/add",
                                 "/products/delete/**",
+                                "/products/edit/**",
                                 "/photos/add",
                                 "/photos/delete/**",
                                 "/categories/add",

@@ -18,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -81,5 +82,22 @@ public class ProductController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @PatchMapping("/edit/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @Operation(summary = "Edit product", security = @SecurityRequirement(name = "bearerAuth"))
+    public ResponseEntity<ProductInfoDto> editProductDetails(@PathVariable Long id,
+                                                @RequestBody Map<String, Object> updates) {
+        Product updatedProduct = productService.editProductDetails(id, updates);
+
+        if (updatedProduct != null) {
+            ProductInfoDto productInfoDto = modelMapper.map(updatedProduct, ProductInfoDto.class);
+            productInfoDto.setCategory(updatedProduct.getCategory().getName());
+            return new ResponseEntity<>(productInfoDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
 }
