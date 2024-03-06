@@ -2,6 +2,7 @@ package com.jchojdak.restaurant.service;
 
 import com.jchojdak.restaurant.model.Role;
 import com.jchojdak.restaurant.model.User;
+import com.jchojdak.restaurant.model.dto.UserInfoDto;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface IRoleService {
     void deleteRole(Long id);
     Role findByName(String name);
 
-    User removeUserFromRole(Long userId, Long roleId);
-    User assignRoleToUser(Long userId, Long roleId);
+    UserInfoDto removeUserFromRole(Long userId, Long roleId);
+    UserInfoDto assignRoleToUser(Long userId, Long roleId);
     Role removeAllUsersFromRole(Long roleId);
 }

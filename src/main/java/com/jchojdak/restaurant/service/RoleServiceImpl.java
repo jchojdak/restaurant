@@ -4,9 +4,11 @@ import com.jchojdak.restaurant.exception.RoleAlreadyExistException;
 import com.jchojdak.restaurant.exception.UserAlreadyExistsException;
 import com.jchojdak.restaurant.model.Role;
 import com.jchojdak.restaurant.model.User;
+import com.jchojdak.restaurant.model.dto.UserInfoDto;
 import com.jchojdak.restaurant.repository.RoleRepository;
 import com.jchojdak.restaurant.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ import java.util.Optional;
 public class RoleServiceImpl implements IRoleService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public void init() {
@@ -70,19 +73,21 @@ public class RoleServiceImpl implements IRoleService {
     }
 
     @Override
-    public User removeUserFromRole(Long userId, Long roleId) {
+    public UserInfoDto removeUserFromRole(Long userId, Long roleId) {
         Optional<User> user = userRepository.findById(userId);
         Optional<Role>  role = roleRepository.findById(roleId);
         if (role.isPresent() && role.get().getUsers().contains(user.get())){
             role.get().removeUserFromRole(user.get());
             roleRepository.save(role.get());
-            return user.get();
+            UserInfoDto userInfoDto = modelMapper.map(user.get(), UserInfoDto.class);
+
+            return userInfoDto;
         }
         throw new UsernameNotFoundException("User not found");
     }
 
     @Override
-    public User assignRoleToUser(Long userId, Long roleId) {
+    public UserInfoDto assignRoleToUser(Long userId, Long roleId) {
         Optional<User> user = userRepository.findById(userId);
         Optional<Role> role = roleRepository.findById(roleId);
         if (user.isPresent() && user.get().getRoles().contains(role.get())){
@@ -93,7 +98,10 @@ public class RoleServiceImpl implements IRoleService {
             role.get().assignRoleToUser(user.get());
             roleRepository.save(role.get());
         }
-        return user.get();
+
+        UserInfoDto userInfoDto = modelMapper.map(user.get(), UserInfoDto.class);
+
+        return userInfoDto;
     }
 
     @Override

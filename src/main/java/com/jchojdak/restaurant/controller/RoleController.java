@@ -3,6 +3,7 @@ package com.jchojdak.restaurant.controller;
 import com.jchojdak.restaurant.exception.RoleAlreadyExistException;
 import com.jchojdak.restaurant.model.Role;
 import com.jchojdak.restaurant.model.User;
+import com.jchojdak.restaurant.model.dto.UserInfoDto;
 import com.jchojdak.restaurant.service.IRoleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -57,7 +58,7 @@ public class RoleController {
     @PostMapping("/remove-user-from-role")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Remove user id from role id", security = @SecurityRequirement(name = "bearerAuth"))
-    public User removeUserFromRole(
+    public UserInfoDto removeUserFromRole(
             @RequestParam("userId") Long userId,
             @RequestParam("roleId") Long roleId){
         return roleService.removeUserFromRole(userId, roleId);
@@ -66,7 +67,7 @@ public class RoleController {
     @PostMapping("/assign-user-to-role")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @Operation(summary = "Assign user id to role id", security = @SecurityRequirement(name = "bearerAuth"))
-    public User assignUserToRole(
+    public UserInfoDto assignUserToRole(
             @RequestParam("userId") Long userId,
             @RequestParam("roleId") Long roleId){
         return roleService.assignRoleToUser(userId, roleId);
