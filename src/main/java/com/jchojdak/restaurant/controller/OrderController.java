@@ -65,7 +65,7 @@ public class OrderController {
     }
 
     @PatchMapping("/update-status/{id}")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN', 'KITCHEN')")
+    @PreAuthorize("hasAnyRole('ROLE_STAFF', 'ROLE_ADMIN', 'ROLE_KITCHEN')")
     @Operation(summary = "Update order status", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<String> updateOrderStatus(@PathVariable Long id, @RequestParam String status) {
         try {
