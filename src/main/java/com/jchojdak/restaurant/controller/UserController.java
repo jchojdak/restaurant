@@ -61,7 +61,7 @@ public class UserController {
         }
     }
 
-    @DeleteMapping("/delete/{userId}")
+    @DeleteMapping("/delete/{email}")
     @Operation(summary = "Delete user by id", security = @SecurityRequirement(name = "bearerAuth"))
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteUser(@PathVariable("userId") String email){
